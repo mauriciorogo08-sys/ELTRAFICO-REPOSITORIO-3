@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>DIARIO EL TRAFICANTE — Edición Suburbio</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Merriweather:wght@300;400;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+theme:{
+extend:{
+fontFamily:{
+sans:['Inter','sans-serif'],
+serif:['Merriweather','serif'],
+display:['Playfair Display','serif']
+},
+colors:{
+brand:{
+yellow:'#FFD500',
+orange:'#ff5e00',
+red:'#ff2d2d',
+paper:'#e7dfd1',
+ink:'#111111',
+charcoal:'#050505'
+}
+}
+}
+}
+}
+</script>
+
+<style>
+
+body{
+overflow-x:hidden;
+background:#ece5d8;
+background-image:
+linear-gradient(rgba(0,0,0,.03) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,0,0,.03) 1px, transparent 1px),
+url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1600&auto=format&fit=crop');
+background-size:4px 4px,4px 4px,cover;
+background-attachment:fixed;
+}
+
+.paper-bg{
+background:
+linear-gradient(rgba(255,255,255,.82),rgba(255,255,255,.82)),
+url('https://images.unsplash.com/photo-1529429611270-57e9bcb3fcb9?q=80&w=1600&auto=format&fit=crop');
+background-size:cover;
+background-blend-mode:screen;
+}
+
+.glass{
+background:rgba(255,255,255,0.45);
+backdrop-filter:blur(16px);
+border:1px solid rgba(0,0,0,0.12);
+}
+
+.marquee{
+animation:marquee 30s linear infinite;
+}
+
+@keyframes marquee{
+0%{transform:translateX(100%)}
+100%{transform:translateX(-100%)}
+}
+
+.gallery-card{
+transition:all .4s ease;
+transform:rotate(-1deg);
+}
+
+.gallery-card:nth-child(even){
+transform:rotate(1deg);
+}
+
+.gallery-card:hover{
+transform:rotate(0deg) scale(1.02);
+}
+
+.gallery-card:hover img{
+transform:scale(1.08);
+filter:contrast(1.15) saturate(1.1);
+}
+
+.gallery-card img{
+transition:transform 1.4s ease;
+filter:grayscale(.1) contrast(1.08);
+}
+
+.noise{
+position:fixed;
+inset:0;
+pointer-events:none;
+opacity:.08;
+background-image:url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop");
+background-size:cover;
+mix-blend-mode:multiply;
+}
+
+.modal-open{
+overflow:hidden;
+}
+
+h1,h2,h3,h4{
+letter-spacing:-0.03em;
+}
+
+.border-zinc-300{
+border-color:#1a1a1a !important;
+}
+
+::-webkit-scrollbar{
+width:10px;
+}
+
+::-webkit-scrollbar-track{
+background:#000;
+}
+
+::-webkit-scrollbar-thumb{
+background:#FFD500;
+border-radius:10px;
+}
+
+.tape{
+position:absolute;
+width:120px;
+height:30px;
+background:rgba(255,255,255,.3);
+backdrop-filter:blur(3px);
+transform:rotate(-8deg);
+top:10px;
+left:-20px;
+}
+
+.grunge{
+position:relative;
+}
+
+.grunge::after{
+content:'';
+position:absolute;
+inset:0;
+background:url('https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?q=80&w=1200&auto=format&fit=crop');
+mix-blend-mode:multiply;
+opacity:.08;
+pointer-events:none;
+}
+
+</style>
+</head>
+
+<body class="paper-bg text-brand-ink font-serif">
+
+<div class="noise"></div>
+
+<!-- TOP BAR -->
+
+<div class="bg-black border-b border-zinc-800 text-brand-yellow text-xs uppercase tracking-[0.25em] font-bold font-sans px-4 py-2 flex justify-between items-center">
+
+<div>
+TRANSMISIÓN CALLEJERA:
+<span class="text-brand-red animate-pulse" id="trafficState">
+Ansiedad Colectiva Detectada
+</span>
+</div>
+
+<div class="flex gap-4 items-center">
+<div id="clock"></div>
+
+<button
+onclick="toggleTheme()"
+class="bg-brand-yellow text-black px-3 py-1 rounded font-black hover:scale-105 transition"
+>
+Modo Disturbio
+</button>
+</div>
+
+</div>
+
+<!-- HEADER -->
+
+<header class="max-w-7xl mx-auto px-4 py-10 text-center">
+
+<div class="border-b-4 border-double border-black pb-6 relative">
+
+<div class="tape"></div>
+
+<p class="font-sans uppercase tracking-[0.3em] text-xs text-zinc-700 italic">
+“Noticias para gente que ya explotó mentalmente”
+</p>
+
+<h1
+onclick="playHorn(440,'triangle',0.2)"
+class="font-display text-6xl md:text-8xl font-black uppercase cursor-pointer leading-none mt-3 hover:text-brand-orange transition"
+>
+DIARIO EL TRAFICANTE
+</h1>
+
+<div class="flex flex-col md:flex-row justify-between items-center mt-6 text-xs font-sans uppercase tracking-widest text-zinc-700">
+
+<div>
+Subsuelo cultural desde 1998
+</div>
+
+<div class="bg-brand-red text-white px-3 py-1 rounded font-black animate-pulse">
+EDICIÓN DISTORSIONADA
+</div>
+
+<div id="todayDate"></div>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- TICKER -->
+
+<section class="bg-black text-white border-y border-zinc-700 overflow-hidden flex py-3">
+
+<div class="bg-brand-red shrink-0 px-4 font-black uppercase text-xs flex items-center">
+ÚLTIMO RUIDO
+</div>
+
+<div class="overflow-hidden w-full">
+<div class="marquee whitespace-nowrap font-sans uppercase text-xs tracking-wider flex gap-16">
+
+<span>🎨 Mural clandestino aparece sobre cartel político.</span>
+
+<span>🚧 Vecinos convierten bache en instalación artística.</span>
+
+<span>🧠 Colapso emocional colectivo en hora pico.</span>
+
+<span>🎭 Performance callejera detiene tránsito y gana aplausos.</span>
+
+<span>📷 Fotógrafo documenta la estética de la mugre urbana.</span>
+
+</div>
+</div>
+
+</section>
+
+<!-- MAIN -->
+
+<main class="max-w-7xl mx-auto px-4 py-10">
+
+<div class="grid lg:grid-cols-12 gap-10">
+
+<!-- LEFT -->
+
+<aside class="lg:col-span-3 space-y-8">
+
+<div class="border-b border-black pb-6">
+
+<span class="font-sans text-xs uppercase tracking-[0.3em] text-brand-red font-black">
+● SUBCULTURA
+</span>
+
+<h3 class="font-display text-2xl font-black leading-tight mt-2 hover:text-brand-orange transition">
+La estética del abandono como identidad urbana
+</h3>
+
+<p class="text-sm text-zinc-700 mt-3 leading-relaxed">
+Paredes rotas, afiches arrancados y humedad: la nueva arquitectura emocional.
+</p>
+
+</div>
+
+<div class="gallery-card bg-white border border-zinc-300 rounded-2xl overflow-hidden shadow-2xl grunge">
+
+<div class="h-64 overflow-hidden">
+<img
+src="https://images.unsplash.com/photo-1519996529931-28324d5a630e?q=80&w=1200&auto=format&fit=crop"
+class="w-full h-full object-cover"
+/>
+</div>
+
+<div class="p-5">
+
+<span class="font-sans uppercase text-[10px] tracking-[0.3em] text-brand-orange font-black">
+ARTE CALLEJERO
+</span>
+
+<h4 class="font-display text-2xl font-black mt-2">
+“Grafiti para sobrevivir”
+</h4>
+
+<p class="text-sm text-zinc-700 mt-3 leading-relaxed">
+Colectivos anónimos llenan la ciudad de mensajes absurdos y poéticos.
+</p>
+
+</div>
+
+</div>
+
+<div class="gallery-card bg-black text-white rounded-2xl overflow-hidden shadow-2xl">
+
+<div class="h-64 overflow-hidden">
+<img
+src="https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1200&auto=format&fit=crop"
+class="w-full h-full object-cover"
+/>
+</div>
+
+<div class="p-5">
+
+<span class="font-sans uppercase text-[10px] tracking-[0.3em] text-brand-yellow font-black">
+FOTOGRAFÍA SOCIAL
+</span>
+
+<h4 class="font-display text-2xl font-black mt-2">
+“La esquina eterna”
+</h4>
+
+<p class="text-sm text-zinc-400 mt-3 leading-relaxed">
+Retratos nocturnos de jóvenes que convierten la calle en refugio emocional.
+</p>
+
+</div>
+
+</div>
+
+</aside>
+
+<!-- CENTER -->
+
+<section class="lg:col-span-6 space-y-10">
+
+<div>
+
+<div class="flex justify-between items-center mb-4">
+
+<span class="bg-brand-red text-white px-3 py-1 text-xs uppercase tracking-[0.3em] font-black rounded">
+PORTADA URBANA
+</span>
+
+<span class="text-xs uppercase font-sans text-zinc-500">
+Edición underground
+</span>
+
+</div>
+
+<h2 class="font-display text-4xl md:text-6xl font-black leading-none hover:text-brand-orange transition cursor-pointer">
+EL CAOS DE LA CIUDAD YA ES UNA FORMA DE ARTE
+</h2>
+
+<div
+onclick="triggerChaos()"
+class="mt-6 bg-black rounded-3xl overflow-hidden relative cursor-pointer h-[420px] group"
+>
+
+<img
+src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=1600&auto=format&fit=crop"
+class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-[3000ms]"
+>
+
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+
+<div class="absolute top-4 left-4 bg-brand-yellow text-black px-3 py-1 rounded uppercase font-black text-xs">
+ARCHIVO SUBTERRÁNEO
+</div>
+
+<div class="absolute top-4 right-4 bg-brand-red text-white px-3 py-1 rounded uppercase font-black text-xs animate-pulse">
+PULSA PARA DISTORSIONAR
+</div>
+
+<div class="absolute bottom-8 left-8 max-w-xl">
+
+<h3 class="font-display text-4xl font-black text-white">
+La ciudad grita aunque nadie escuche
+</h3>
+
+<p class="text-zinc-300 mt-3 leading-relaxed">
+Entre neón, humedad y cemento nace una nueva sensibilidad urbana.
+</p>
+
+</div>
+
+</div>
+
+<p class="text-lg leading-relaxed mt-6 text-zinc-800 first-letter:text-6xl first-letter:font-black first-letter:float-left first-letter:mr-4 first-letter:text-brand-orange">
+El deterioro urbano dejó de ser un problema para convertirse en una identidad visual colectiva.
+</p>
+
+</div>
+
+<!-- GALLERY -->
+
+<section>
+
+<div class="flex justify-between items-end mb-6">
+
+<div>
+
+<span class="font-sans uppercase tracking-[0.3em] text-xs font-black text-brand-red">
+ARCHIVO VISUAL
+</span>
+
+<h3 class="font-display text-4xl font-black">
+Galería del Suburbio
+</h3>
+
+</div>
+
+</div>
+
+<div class="grid md:grid-cols-2 gap-8">
+
+<div class="gallery-card rounded-3xl overflow-hidden bg-white shadow-xl">
+
+<div class="h-72 overflow-hidden">
+<img
+src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=1200&auto=format&fit=crop"
+class="w-full h-full object-cover"
+/>
+</div>
+
+<div class="p-6">
+
+<h4 class="font-display text-3xl font-black">
+“Noches eléctricas”
+</h4>
+
+<p class="mt-3 text-zinc-700 leading-relaxed">
+La ansiedad urbana transformada en fotografía callejera.
+</p>
+
+</div>
+
+</div>
+
+<div class="gallery-card rounded-3xl overflow-hidden bg-black text-white shadow-2xl">
+
+<div class="h-72 overflow-hidden">
+<img
+src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1200&auto=format&fit=crop"
+class="w-full h-full object-cover"
+/>
+</div>
+
+<div class="p-6">
+
+<h4 class="font-display text-3xl font-black text-brand-yellow">
+“Ruido visual”
+</h4>
+
+<p class="mt-3 text-zinc-400 leading-relaxed">
+Luces, carteles y caos convertidos en poesía visual contemporánea.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</section>
+
+<!-- RIGHT -->
+
+<aside class="lg:col-span-3 space-y-8">
+
+<div class="bg-white rounded-3xl border border-zinc-300 p-6 shadow-lg">
+
+<span class="font-sans uppercase tracking-[0.3em] text-[10px] font-black text-brand-red">
+GENERADOR DE COARTADAS
+</span>
+
+<h3 class="font-display text-3xl font-black mt-3">
+¿Desapareciste?
+</h3>
+
+<p class="text-sm text-zinc-600 mt-2">
+Convertimos caos personal en excusa artística.
+</p>
+
+<input
+id="excuseInput"
+type="text"
+placeholder="Ej: Perdí el bondi..."
+class="w-full mt-5 border border-zinc-300 rounded-xl p-3 text-sm"
+/>
+
+<button
+onclick="generateExcuse()"
+class="w-full mt-4 bg-brand-orange text-white py-3 rounded-xl uppercase tracking-[0.2em] text-xs font-black hover:bg-black transition"
+>
+Fabricar Excusa
+</button>
+
+<div
+id="excuseBox"
+class="hidden mt-5 bg-brand-yellow/20 border border-brand-yellow rounded-2xl p-4 italic text-sm"
+></div>
+
+</div>
+
+<div class="bg-black text-white rounded-3xl overflow-hidden shadow-2xl">
+
+<div class="h-80 overflow-hidden">
+<img
+src="https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?q=80&w=1200&auto=format&fit=crop"
+class="w-full h-full object-cover opacity-70"
+/>
+</div>
+
+<div class="p-6">
+
+<span class="font-sans uppercase tracking-[0.3em] text-[10px] font-black text-brand-yellow">
+ORÁCULO CALLEJERO
+</span>
+
+<h3 class="font-display text-3xl font-black mt-3">
+Profecía del Barrio
+</h3>
+
+<p id="oracleText" class="text-zinc-300 mt-4 leading-relaxed">
+Hoy escucharás una conversación ajena que cambiará tu percepción estética.
+</p>
+
+<button
+onclick="newOracle()"
+class="mt-5 bg-brand-yellow text-black px-4 py-3 rounded-xl uppercase tracking-[0.2em] text-xs font-black hover:bg-white transition"
+>
+Otra Profecía
+</button>
+
+</div>
+
+</div>
+
+</aside>
+
+</div>
+
+</main>
+
+<footer class="bg-black text-white mt-20 border-t-4 border-brand-yellow">
+
+<div class="max-w-7xl mx-auto px-4 py-12 text-center">
+
+<h3 class="font-display text-4xl font-black text-brand-yellow uppercase">
+EL DIARIO EL TRAFICANTE
+</h3>
+
+<p class="max-w-2xl mx-auto mt-5 text-zinc-400 text-sm leading-relaxed">
+Periodismo callejero, arte visual y ansiedad colectiva.
+</p>
+
+<p class="mt-6 text-xs uppercase tracking-[0.3em] text-zinc-600 font-sans">
+VERSIÓN SUBURBIO 9.0
+</p>
+
+</div>
+
+</footer>
+
+<script>
+
+let audioCtx = null
+
+function initAudio(){
+if(!audioCtx){
+audioCtx = new(window.AudioContext || window.webkitAudioContext)()
+}
+}
+
+function playHorn(freq=440,type='sine',duration=.2){
+
+try{
+
+initAudio()
+
+const osc = audioCtx.createOscillator()
+const gain = audioCtx.createGain()
+
+osc.type = type
+osc.frequency.value = freq
+
+gain.gain.setValueAtTime(.0001,audioCtx.currentTime)
+gain.gain.exponentialRampToValueAtTime(.2,audioCtx.currentTime+.02)
+gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+duration)
+
+osc.connect(gain)
+gain.connect(audioCtx.destination)
+
+osc.start()
+osc.stop(audioCtx.currentTime+duration)
+
+}catch(e){}
+
+}
+
+function triggerChaos(){
+
+playHorn(120,'sawtooth',.5)
+
+document.body.animate([
+{transform:'translateX(0px)'},
+{transform:'translateX(-5px)'},
+{transform:'translateX(5px)'},
+{transform:'translateX(0px)'}
+],{
+duration:300
+})
+
+}
+
+function toggleTheme(){
+
+document.body.classList.toggle('bg-black')
+document.body.classList.toggle('text-white')
+
+}
+
+const today = new Date()
+
+document.getElementById('todayDate').textContent =
+today.toLocaleDateString('es-ES',{
+weekday:'long',
+year:'numeric',
+month:'long',
+day:'numeric'
+})
+
+setInterval(()=>{
+
+const now = new Date()
+
+document.getElementById('clock').textContent =
+now.toLocaleTimeString('es-ES')
+
+},1000)
+
+</script>
+
+</body>
+</html>
